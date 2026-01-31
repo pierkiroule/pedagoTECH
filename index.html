@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PedagoTech-PSY360° | Application de Pédagogie Thérapeutique (Démo)</title>
+    <style>
+        :root {
+            --app-blue: #00558d;
+            --app-light-blue: #e6f0f7;
+            --app-dark: #1b1b1b;
+            --app-grey: #f4f4f4;
+            --app-border: #ccd6df;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--app-grey);
+            color: var(--app-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(120deg, #004572, #0b76b7);
+            color: white;
+            padding: 1.2rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .logo-area h1 {
+            margin: 0;
+            font-size: 1.6rem;
+        }
+
+        .logo-area small {
+            opacity: 0.9;
+        }
+
+        .demo-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 0.35rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        nav button {
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            margin-left: 0.5rem;
+            border-radius: 6px;
+        }
+
+        nav button:hover {
+            background: rgba(255,255,255,0.12);
+        }
+
+        nav button.active {
+            background: white;
+            color: var(--app-blue);
+        }
+
+        main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .demo-banner {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: grid;
+            gap: 1rem;
+            box-shadow: var(--shadow);
+            border-left: 6px solid var(--warning);
+        }
+
+        .demo-banner strong {
+            color: var(--app-blue);
+        }
+
+        .demo-banner ul {
+            margin: 0;
+            padding-left: 1.2rem;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        .filters {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            border: 1px solid var(--app-border);
+            box-shadow: var(--shadow);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 200px;
+            flex: 1;
+        }
+
+        .filter-group label {
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        select, input {
+            padding: 0.6rem;
+            border: 1px solid var(--app-border);
+            border-radius: 6px;
+        }
+
+        .sessions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid var(--app-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.2s, transform 0.2s;
+            box-shadow: var(--shadow);
+        }
+
+        .card:hover {
+            border-color: var(--app-blue);
+            transform: translateY(-2px);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--app-blue);
+        }
+
+        .tag {
+            display: inline-block;
+            background: var(--app-light-blue);
+            color: var(--app-blue);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 0.3rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .card-footer {
+            margin-top: auto;
+            padding-top: 1rem;
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .wizard-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            border: 1px solid var(--app-border);
+            box-shadow: var(--shadow);
+        }
+
+        .step-indicator {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem;
+            border-bottom: 3px solid var(--app-border);
+            color: #999;
+            font-size: 0.8rem;
+            min-width: 100px;
+        }
+
+        .step-indicator.active {
+            border-color: var(--app-blue);
+            color: var(--app-blue);
+            font-weight: bold;
+        }
+
+        .form-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--app-border);
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--app-border);
+            border-radius: 6px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .wizard-nav {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .detail-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px 12px 0 0;
+            border: 1px solid var(--app-border);
+            border-bottom: none;
+        }
+
+        .detail-body {
+            background: white;
+            padding: 2rem;
+            border-radius: 0 0 12px 12px;
+            border: 1px solid var(--app-border);
+            box-shadow: var(--shadow);
+        }
+
+        .detail-highlight {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .detail-highlight span {
+            background: var(--app-light-blue);
+            color: var(--app-blue);
+            padding: 0.4rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            border: 1px solid var(--app-border);
+            padding: 0.8rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--app-light-blue);
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            font-weight: bold;
+        }
+
+        .btn-primary { background: var(--app-blue); color: white; }
+        .btn-secondary { background: var(--app-border); color: var(--app-dark); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+
+        footer {
+            margin-top: 3rem;
+            padding: 2rem;
+            text-align: center;
+            color: #666;
+        }
+
+        @media print {
+            nav, .filters, .wizard-nav, .btn, .no-print, .demo-banner, footer {
+                display: none !important;
+            }
+            body { background: white; }
+            main { padding: 0; max-width: 100%; }
+            .detail-header, .detail-body { border: none; padding: 0; }
+            .view { display: block !important; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-area">
+        <h1>PedagoTech-PSY360°</h1>
+        <small>Pédagothèque de soins éducatifs et thérapeutiques</small>
+        <div class="demo-pill" aria-label="Mention démo">
+            <strong>Démo</strong>
+            <span>Prototype non contractuel</span>
+        </div>
+    </div>
+    <nav>
+        <button id="nav-explorer" class="active" onclick="showView('explorer')">Explorer</button>
+        <button id="nav-create" onclick="initCreate()">Nouvelle Séance</button>
+    </nav>
+</header>
+
+<main>
+    <section class="demo-banner" aria-live="polite">
+        <div>
+            <strong>Cette application est une démo.</strong>
+            Elle illustre un parcours de création et de consultation de séances pédagogiques.
+        </div>
+        <ul>
+            <li>Données locales fictives (stockage navigateur).</li>
+            <li>Pas de synchronisation réseau ni de données patient.</li>
+            <li>Utilisez-la comme base de discussion pour un futur produit.</li>
+        </ul>
+    </section>
+
+    <section id="view-explorer" class="view active">
+        <div class="filters">
+            <div class="filter-group">
+                <label for="filter-public">Public</label>
+                <select id="filter-public" onchange="filterSessions()">
+                    <option value="">Tous</option>
+                    <option value="Enfant">Enfant</option>
+                    <option value="Adolescent">Adolescent</option>
+                    <option value="Parent">Parent</option>
+                    <option value="Adulte">Adulte</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filter-metaphore">Métaphore</label>
+                <input type="text" id="filter-metaphore" placeholder="Ex: Jardin..." onkeyup="filterSessions()">
+            </div>
+            <div class="filter-group">
+                <label for="filter-text">Recherche</label>
+                <input type="text" id="filter-text" placeholder="Titre, objectifs..." onkeyup="filterSessions()">
+            </div>
+        </div>
+        <div id="sessions-list" class="sessions-grid"></div>
+    </section>
+
+    <section id="view-detail" class="view">
+        <div id="detail-content"></div>
+        <div class="wizard-nav no-print">
+            <button class="btn btn-secondary" onclick="showView('explorer')">Retour</button>
+            <div>
+                <button class="btn btn-primary" onclick="window.print()">Imprimer PDF</button>
+                <button id="btn-edit-session" class="btn btn-success">Modifier</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="view-form" class="view">
+        <div class="wizard-steps">
+            <div class="step-indicator" data-step="1">1. Identité</div>
+            <div class="step-indicator" data-step="2">2. Clinique</div>
+            <div class="step-indicator" data-step="3">3. Pédagogie</div>
+            <div class="step-indicator" data-step="4">4. Déroulé</div>
+            <div class="step-indicator" data-step="5">5. Logistique</div>
+            <div class="step-indicator" data-step="6">6. Validation</div>
+        </div>
+
+        <form id="session-form">
+            <input type="hidden" id="form-id">
+
+            <div class="form-section step-content" data-step="1">
+                <h2>Identité de la séance</h2>
+                <div class="form-group">
+                    <label for="form-titre">Titre de la séance *</label>
+                    <input type="text" id="form-titre" required>
+                </div>
+                <div class="form-group">
+                    <label for="form-public">Public cible (séparer par des virgules)</label>
+                    <input type="text" id="form-public" placeholder="Ex: Adolescent, Parents">
+                </div>
+                <div class="form-group">
+                    <label for="form-metaphore">Métaphore utilisée</label>
+                    <input type="text" id="form-metaphore" placeholder="Ex: Le refuge portable">
+                </div>
+            </div>
+
+            <div class="form-section step-content" data-step="2" style="display:none">
+                <h2>Contexte Clinique</h2>
+                <div class="form-group">
+                    <label for="form-indications">Indications</label>
+                    <textarea id="form-indications"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="form-criteresInclusion">Critères d'inclusion / Vigilances</label>
+                    <textarea id="form-criteresInclusion"></textarea>
+                </div>
+            </div>
+
+            <div class="form-section step-content" data-step="3" style="display:none">
+                <h2>Objectifs & Compétences</h2>
+                <div class="form-group">
+                    <label for="form-objectif">Objectif éducatif prioritaire</label>
+                    <textarea id="form-objectif"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="form-competences">Compétences mobilisées (virgules)</label>
+                    <input type="text" id="form-competences">
+                </div>
+            </div>
+
+            <div class="form-section step-content" data-step="4" style="display:none">
+                <h2>Déroulé éducatif et thérapeutique</h2>
+                <p><small>Format : Temps | Intention | Médiation | Posture</small></p>
+                <div class="form-group">
+                    <label for="form-deroule-raw">Séquençage</label>
+                    <textarea id="form-deroule-raw"></textarea>
+                </div>
+            </div>
+
+            <div class="form-section step-content" data-step="5" style="display:none">
+                <h2>Logistique & Matériel</h2>
+                <div class="form-group">
+                    <label for="form-duree">Durée totale</label>
+                    <input type="text" id="form-duree">
+                </div>
+                <div class="form-group">
+                    <label for="form-modalite">Modalité</label>
+                    <select id="form-modalite">
+                        <option value="Groupe">Groupe</option>
+                        <option value="Individuel">Individuel</option>
+                        <option value="Mixte">Mixte</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="form-supports">Supports (MP3, Vidéo 360, etc.)</label>
+                    <textarea id="form-supports"></textarea>
+                </div>
+            </div>
+
+            <div class="form-section step-content" data-step="6" style="display:none">
+                <h2>Évaluation & Trace</h2>
+                <div class="form-group">
+                    <label for="form-evaluation">Critères de réussite / Trace écrite</label>
+                    <textarea id="form-evaluation"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="form-version">Version</label>
+                    <input type="number" id="form-version" value="1">
+                </div>
+            </div>
+
+            <div class="wizard-nav">
+                <button type="button" id="btn-prev" class="btn btn-secondary" onclick="changeStep(-1)">Précédent</button>
+                <button type="button" id="btn-next" class="btn btn-primary" onclick="changeStep(1)">Suivant</button>
+                <button type="submit" id="btn-save" class="btn btn-success" style="display:none">Enregistrer la fiche</button>
+            </div>
+        </form>
+    </section>
+</main>
+
+<footer>
+    <p><strong>PedagoTech-PSY360°</strong> · Démonstrateur pédagogique & thérapeutique (données locales).</p>
+</footer>
+
+<script>
+    const demoSessions = [
+        {
+            id: "demo-360",
+            titre: "Paysage intérieur 360°",
+            public: ["Adolescent", "Adulte"],
+            indications: "Anxiété, agitation, ruminations, difficulté à réguler les émotions.",
+            criteresInclusion: "Tolérance casque audio, pas d'épilepsie photosensible. Vigilance dissociation.",
+            objectif: "Identifier un état interne et activer une stratégie de régulation sensorielle en moins de 2 min.",
+            competences: ["Auto-observation", "Mise en mots", "Choix d'outil adapté", "Plan d'action"],
+            metaphore: "Le refuge portable (Fenêtre attentionnelle et Ancrage sonore)",
+            duree: "45 min",
+            modalite: "Mixte (4-6 pers.)",
+            deroule: [
+                { temps: "5'", intention: "Cadre + sécurité", mediation: "Règles : stop, volume, silence", posture: "Contenante" },
+                { temps: "5'", intention: "Baseline", mediation: "Thermomètre interne (0-10)", posture: "Neutre" },
+                { temps: "5'", intention: "Choix du refuge", mediation: "3 vidéos 360 + 5 sons mp3", posture: "Guidante" },
+                { temps: "7'", intention: "Immersion 1", mediation: "Vision 360 + mp3 + respiration", posture: "Très sobre" },
+                { temps: "6'", intention: "Débrief 1", mediation: "3 questions : Corps ? Mot ? Utile ?", posture: "Non interprétative" },
+                { temps: "7'", intention: "Immersion 2", mediation: "Ajustement d'une variable", posture: "Expérimentale" },
+                { temps: "6'", intention: "Débrief 2", mediation: "Comparer avant/après", posture: "Structurante" },
+                { temps: "4'", intention: "Plan d'usage", mediation: "Script 'Quand je déborde, je...'", posture: "Opérationnelle" }
+            ],
+            supports: "Smartphone + casque, Clips 360° calmes, Sons MP3 (mer, forêt, etc.), Fiches 'climat interne'.",
+            evaluation: "Baisse de 1 point au thermomètre interne, établissement d'un protocole personnel en 1 phrase.",
+            version: 1,
+            date: "2024-03-25"
+        },
+        {
+            id: "demo-1",
+            titre: "La métaphore du Jardinier",
+            public: ["Adolescent", "Adulte"],
+            indications: "Troubles anxieux, estime de soi.",
+            criteresInclusion: "Patients stabilisés, capacité d'abstraction.",
+            objectif: "Identifier ses ressources et ses limites.",
+            competences: ["Auto-observation", "Gestion du stress"],
+            metaphore: "Le jardin intérieur",
+            duree: "60 min",
+            modalite: "Groupe",
+            deroule: [
+                { temps: "10'", intention: "Accueil", mediation: "Météo intérieure", posture: "Contenante" },
+                { temps: "30'", intention: "Exploration", mediation: "Dessin du jardin", posture: "Accompagnante" },
+                { temps: "20'", intention: "Partage", mediation: "Cercle de parole", posture: "Neutre" }
+            ],
+            supports: "Papier A3, feutres.",
+            evaluation: "Auto-évaluation qualitative.",
+            version: 1,
+            date: "2024-01-01"
+        }
+    ];
+
+    let sessions = JSON.parse(localStorage.getItem('psy360_sessions')) || demoSessions;
+    let currentStep = 1;
+
+    function saveToStorage() {
+        localStorage.setItem('psy360_sessions', JSON.stringify(sessions));
+    }
+
+    function showView(viewName) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById('view-' + viewName).classList.add('active');
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        const navBtn = document.getElementById('nav-' + (viewName === 'form' ? 'create' : viewName));
+        if (navBtn) navBtn.classList.add('active');
+        if (viewName === 'explorer') renderSessions();
+    }
+
+    function renderSessions(data = sessions) {
+        const container = document.getElementById('sessions-list');
+        container.innerHTML = '';
+        data.forEach(s => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <h3>${s.titre}</h3>
+                <div>${s.public.map(p => `<span class="tag">${p}</span>`).join('')}</div>
+                <p><small><strong>Métaphore:</strong> ${s.metaphore || 'N/A'}</small></p>
+                <p>${s.objectif.substring(0, 80)}...</p>
+                <div class="card-footer">
+                    <button class="btn btn-primary" onclick="viewDetail('${s.id}')">Consulter</button>
+                    <button class="btn btn-secondary" onclick="duplicateSession('${s.id}')">Copier</button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function filterSessions() {
+        const pub = document.getElementById('filter-public').value;
+        const meta = document.getElementById('filter-metaphore').value.toLowerCase();
+        const text = document.getElementById('filter-text').value.toLowerCase();
+        const filtered = sessions.filter(s => {
+            const matchPub = pub === "" || s.public.includes(pub);
+            const matchMeta = (s.metaphore || "").toLowerCase().includes(meta);
+            const matchText = s.titre.toLowerCase().includes(text) || s.objectif.toLowerCase().includes(text);
+            return matchPub && matchMeta && matchText;
+        });
+        renderSessions(filtered);
+    }
+
+    function viewDetail(id) {
+        const s = sessions.find(x => x.id === id);
+        if (!s) return;
+        const container = document.getElementById('detail-content');
+        container.innerHTML = `
+            <div class="detail-header">
+                <h1 style="color:var(--app-blue); margin-bottom:5px;">${s.titre}</h1>
+                <p><strong>Cadre :</strong> Éducatif et Thérapeutique | <strong>Public :</strong> ${s.public.join(', ')} | <strong>Durée :</strong> ${s.duree}</p>
+                <div class="detail-highlight">
+                    <span>Modalité : ${s.modalite}</span>
+                    <span>Version : ${s.version}</span>
+                    <span>Date : ${s.date}</span>
+                </div>
+            </div>
+            <div class="detail-body">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <h4>Objectif éducatif prioritaire</h4>
+                        <p>${s.objectif}</p>
+                        <h4>Compétences visées</h4>
+                        <p>${s.competences.join(', ')}</p>
+                    </div>
+                    <div>
+                        <h4>Contexte & Indications</h4>
+                        <p>${s.indications}</p>
+                        <h4>Métaphore</h4>
+                        <p><em>${s.metaphore}</em></p>
+                    </div>
+                </div>
+                <h4>Déroulé de la séance</h4>
+                <table>
+                    <thead><tr><th>Temps</th><th>Intention</th><th>Médiation</th><th>Posture</th></tr></thead>
+                    <tbody>${s.deroule.map(d => `<tr><td>${d.temps}</td><td>${d.intention}</td><td>${d.mediation}</td><td>${d.posture}</td></tr>`).join('')}</tbody>
+                </table>
+                <div style="margin-top:2rem; border-top:1px solid #eee; padding-top:1rem;">
+                    <p><strong>Supports pédagogiques :</strong> ${s.supports}</p>
+                    <p><strong>Critères de réussite :</strong> ${s.evaluation}</p>
+                </div>
+            </div>
+        `;
+        document.getElementById('btn-edit-session').onclick = () => editSession(s.id);
+        showView('detail');
+    }
+
+    function initCreate() {
+        document.getElementById('session-form').reset();
+        document.getElementById('form-id').value = '';
+        currentStep = 1;
+        updateWizardUI();
+        showView('form');
+    }
+
+    function changeStep(n) {
+        const nextStep = currentStep + n;
+        if (nextStep < 1 || nextStep > 6) return;
+        currentStep = nextStep;
+        updateWizardUI();
+    }
+
+    function updateWizardUI() {
+        document.querySelectorAll('.step-content').forEach(s => s.style.display = 'none');
+        document.querySelector(`.step-content[data-step="${currentStep}"]`).style.display = 'block';
+        document.querySelectorAll('.step-indicator').forEach(i => {
+            i.classList.remove('active');
+            if (parseInt(i.dataset.step) === currentStep) i.classList.add('active');
+        });
+        document.getElementById('btn-prev').style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+        document.getElementById('btn-next').style.display = currentStep === 6 ? 'none' : 'inline-block';
+        document.getElementById('btn-save').style.display = currentStep === 6 ? 'inline-block' : 'none';
+    }
+
+    document.getElementById('session-form').onsubmit = function(e) {
+        e.preventDefault();
+        const id = document.getElementById('form-id').value || 'session-' + Date.now();
+        const rawDeroule = document.getElementById('form-deroule-raw').value;
+        const derouleParsed = rawDeroule.split('\n').filter(l => l.includes('|')).map(line => {
+            const parts = line.split('|');
+            return { temps: parts[0]?.trim(), intention: parts[1]?.trim(), mediation: parts[2]?.trim(), posture: parts[3]?.trim() };
+        });
+        const newSession = {
+            id,
+            titre: document.getElementById('form-titre').value,
+            public: document.getElementById('form-public').value.split(',').map(x => x.trim()).filter(x => x),
+            indications: document.getElementById('form-indications').value,
+            criteresInclusion: document.getElementById('form-criteresInclusion').value,
+            objectif: document.getElementById('form-objectif').value,
+            competences: document.getElementById('form-competences').value.split(',').map(x => x.trim()).filter(x => x),
+            metaphore: document.getElementById('form-metaphore').value,
+            duree: document.getElementById('form-duree').value,
+            modalite: document.getElementById('form-modalite').value,
+            deroule: derouleParsed.length > 0 ? derouleParsed : [{temps:'-', intention:'Cf texte', mediation:'-', posture:'-'}],
+            supports: document.getElementById('form-supports').value,
+            evaluation: document.getElementById('form-evaluation').value,
+            version: parseInt(document.getElementById('form-version').value),
+            date: new Date().toLocaleDateString('fr-FR')
+        };
+        const index = sessions.findIndex(s => s.id === id);
+        if (index > -1) sessions[index] = newSession; else sessions.push(newSession);
+        saveToStorage();
+        showView('explorer');
+    };
+
+    function editSession(id) {
+        const s = sessions.find(x => x.id === id);
+        if (!s) return;
+        initCreate();
+        document.getElementById('form-id').value = s.id;
+        document.getElementById('form-titre').value = s.titre;
+        document.getElementById('form-public').value = s.public.join(', ');
+        document.getElementById('form-metaphore').value = s.metaphore;
+        document.getElementById('form-indications').value = s.indications;
+        document.getElementById('form-criteresInclusion').value = (s.criteresInclusion || "");
+        document.getElementById('form-objectif').value = s.objectif;
+        document.getElementById('form-competences').value = s.competences.join(', ');
+        document.getElementById('form-duree').value = s.duree;
+        document.getElementById('form-modalite').value = s.modalite;
+        document.getElementById('form-supports').value = s.supports;
+        document.getElementById('form-evaluation').value = s.evaluation;
+        document.getElementById('form-version').value = s.version;
+        document.getElementById('form-deroule-raw').value = s.deroule.map(d => `${d.temps} | ${d.intention} | ${d.mediation} | ${d.posture}`).join('\n');
+    }
+
+    function duplicateSession(id) {
+        const s = sessions.find(x => x.id === id);
+        if (!s) return;
+        const clone = JSON.parse(JSON.stringify(s));
+        clone.id = 'session-' + Date.now();
+        clone.titre = s.titre + ' (Copie)';
+        sessions.push(clone);
+        saveToStorage();
+        renderSessions();
+    }
+
+    window.onload = () => renderSessions();
+</script>
+</body>
+</html>
